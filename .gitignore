@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+.DS_Store
+
+# Your own playbook text/templates — keep rulebook content out of the repo
+templates/

@@ -1,0 +1,40 @@
+:root {
+  --paper-bg: #f3ead9;
+  --paper-ink: #2b2420;
+  --paper-rule: #b8a888;
+  --paper-accent: #7a3b2e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--paper-bg);
+  color: var(--paper-ink);
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  font-weight: 600;
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+/* Minimum tap target for iPad, per PLAN.md */
+button,
+input[type='checkbox'] {
+  min-width: 44px;
+  min-height: 44px;
+}

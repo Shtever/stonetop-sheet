@@ -28,6 +28,7 @@ export interface ResourceGroup {
   id: string;
   label: string; // 'Invocations', 'Sacred Pouch', ...
   entries: ResourceEntry[];
+  stock?: { current: number; max: number }; // e.g. Sacred Pouch stock boxes
 }
 
 export interface Item {

@@ -1,5 +1,6 @@
 import type { Character, ResourceEntry } from '../../model/types';
 import Checkbox from '../ui/Checkbox';
+import BoxTrack from '../ui/BoxTrack';
 
 interface Props {
   character: Character;
@@ -17,12 +18,34 @@ export default function ResourceGroups({ character, onChange }: Props) {
     });
   };
 
+  const setStock = (groupId: string, current: number) => {
+    onChange({
+      resources: character.resources.map((g) =>
+        g.id !== groupId || !g.stock ? g : { ...g, stock: { ...g.stock, current } },
+      ),
+    });
+  };
+
   return (
     <section className="sheet-section resource-groups">
       <h2>Spells &amp; Resources</h2>
       {character.resources.map((group) => (
         <div key={group.id} className="resource-group">
-          <h3>{group.label}</h3>
+          <div className="resource-group-header">
+            <h3>{group.label}</h3>
+            {group.stock && (
+              <div className="resource-group-stock">
+                <span className="resource-group-stock-label">
+                  Stock {group.stock.current} / {group.stock.max}
+                </span>
+                <BoxTrack
+                  total={group.stock.max}
+                  marked={group.stock.current}
+                  onChange={(current) => setStock(group.id, current)}
+                />
+              </div>
+            )}
+          </div>
           {group.entries.map((entry) => (
             <div key={entry.id} className="resource-entry">
               <span className="resource-entry-name">{entry.name}</span>

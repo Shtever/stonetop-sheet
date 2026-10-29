@@ -170,10 +170,37 @@
   margin-bottom: 1rem;
 }
 
-.resource-group h3 {
+.resource-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.resource-group-header h3 {
   font-size: 0.95rem;
   color: var(--paper-accent);
-  margin: 0 0 0.35rem;
+  margin: 0;
+}
+
+.resource-group-stock {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resource-group-stock-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--paper-accent);
+}
+
+.resource-group-stock .box-track-box {
+  width: 32px;
+  height: 32px;
 }
 
 .resource-entry {

@@ -4,24 +4,59 @@
   padding: 1rem;
 }
 
+.sheet-loading {
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--paper-ink);
+}
+
 .sheet-header {
   border-bottom: 2px solid var(--paper-ink);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
   margin-bottom: 1rem;
 }
 
-.sheet-header h1 {
-  font-size: 1.5rem;
-  color: var(--paper-accent);
+.sheet-header-top {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  gap: 1rem;
 }
 
-.sheet-header-fields {
-  display: flex;
-  gap: 1.5rem;
+.sheet-header-top .inline-field-input {
+  font-size: 1.3rem;
+}
+
+.sheet-header-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
   margin-top: 0.5rem;
-  font-size: 0.9rem;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sheet-actions button,
+.import-button {
+  border: 1px solid var(--paper-ink);
+  background: transparent;
   color: var(--paper-ink);
-  opacity: 0.8;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.import-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.import-button input[type='file'] {
+  display: none;
 }
 
 .sheet-columns {
@@ -49,9 +84,134 @@
   padding-top: 0.5rem;
 }
 
+.notes-text {
+  width: 100%;
+  min-height: 6rem;
+  border: 1px solid var(--paper-rule);
+  background: transparent;
+  color: var(--paper-ink);
+  padding: 0.5rem;
+  resize: vertical;
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid var(--paper-rule);
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.stat-key {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--paper-accent);
+}
+
+.stat-modifier {
+  width: 3rem;
+  text-align: center;
+  font-size: 1.5rem;
+  border: none;
+  background: transparent;
+  color: var(--paper-ink);
+}
+
+/* HP / XP */
+.hp-row {
+  margin-bottom: 0.75rem;
+}
+
+.hp-row-secondary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.xp-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.xp-level-up {
+  color: var(--paper-accent);
+  font-weight: 600;
+}
+
+/* Moves */
+.move-entry {
+  margin-bottom: 1rem;
+}
+
+.move-text {
+  width: 100%;
+  min-height: 3rem;
+  border: none;
+  border-bottom: 1px solid var(--paper-rule);
+  background: transparent;
+  color: var(--paper-ink);
+  margin-top: 0.25rem;
+  resize: vertical;
+}
+
+/* Resources */
+.resource-group {
+  margin-bottom: 1rem;
+}
+
+.resource-group h3 {
+  font-size: 0.95rem;
+  color: var(--paper-accent);
+  margin: 0 0 0.35rem;
+}
+
+.resource-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.resource-entry-name {
+  min-width: 10rem;
+}
+
+/* Inventory */
+.inventory-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.inventory-item {
+  margin-bottom: 0.35rem;
+}
+
+.load-meter {
+  font-size: 0.85rem;
+  color: var(--paper-accent);
+  margin: 0 0 0.5rem;
+}
+
 /* Collapse to one column in portrait, per PLAN.md UI layout rules */
 @media (max-width: 800px) {
   .sheet-columns {
     grid-template-columns: 1fr;
+  }
+
+  .sheet-header-top,
+  .sheet-header-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }

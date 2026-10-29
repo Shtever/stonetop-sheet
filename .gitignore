@@ -6,3 +6,4 @@ dist-ssr/
 
 # Your own playbook text/templates — keep rulebook content out of the repo
 templates/
+*.pdf

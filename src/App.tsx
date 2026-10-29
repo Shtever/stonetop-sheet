@@ -1,48 +1,66 @@
+import { useEffect } from 'react';
 import './App.css';
+import { useCharacterStore } from './store/useCharacter';
+import { exportCharacter, importCharacter } from './io/backup';
+import IdentityHeader from './components/sheet/IdentityHeader';
+import StatsBlock from './components/sheet/StatsBlock';
+import HpBlock from './components/sheet/HpBlock';
+import XpBlock from './components/sheet/XpBlock';
+import MovesList from './components/sheet/MovesList';
+import ResourceGroups from './components/sheet/ResourceGroups';
+import InventoryList from './components/sheet/InventoryList';
+import NotesBlock from './components/sheet/NotesBlock';
 
-// Phase 1: empty scaffold. Each <section> below is placeholder for the
-// real sheet components built in later phases (see PLAN.md).
 export default function App() {
+  const { character, loaded, init, update } = useCharacterStore();
+
+  useEffect(() => {
+    void init();
+  }, [init]);
+
+  if (!loaded) {
+    return <div className="sheet-loading">Loading...</div>;
+  }
+
   return (
     <div className="sheet">
-      <header className="sheet-header">
-        <h1>Stonetop Character Sheet</h1>
-        <div className="sheet-header-fields">
-          <span>Name</span>
-          <span>Playbook</span>
-          <span>Level</span>
-        </div>
-      </header>
+      <IdentityHeader character={character} onChange={update} />
+
+      <div className="sheet-actions">
+        <button type="button" onClick={() => exportCharacter(character)}>
+          Export JSON
+        </button>
+        <label className="import-button">
+          Import JSON
+          <input
+            type="file"
+            accept="application/json"
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const imported = await importCharacter(file);
+              update(imported);
+              e.target.value = '';
+            }}
+          />
+        </label>
+      </div>
 
       <main className="sheet-columns">
         <div className="sheet-column">
-          <section className="sheet-section">
-            <h2>Stats &amp; Debilities</h2>
-          </section>
-          <section className="sheet-section">
-            <h2>HP, Armor &amp; Damage</h2>
-          </section>
-          <section className="sheet-section">
-            <h2>XP, Bonds &amp; Background</h2>
-          </section>
+          <StatsBlock character={character} onChange={update} />
+          <HpBlock character={character} onChange={update} />
+          <XpBlock character={character} onChange={update} />
         </div>
 
         <div className="sheet-column">
-          <section className="sheet-section">
-            <h2>Moves</h2>
-          </section>
-          <section className="sheet-section">
-            <h2>Spells &amp; Resources</h2>
-          </section>
-          <section className="sheet-section">
-            <h2>Inventory</h2>
-          </section>
+          <MovesList character={character} onChange={update} />
+          <ResourceGroups character={character} onChange={update} />
+          <InventoryList character={character} onChange={update} />
         </div>
       </main>
 
-      <footer className="sheet-footer">
-        <h2>Notes</h2>
-      </footer>
+      <NotesBlock character={character} onChange={update} />
     </div>
   );
 }

@@ -7,13 +7,13 @@ interface Props {
 
 export default function NotesBlock({ character, onChange }: Props) {
   return (
-    <footer className="sheet-footer">
+    <section className="sheet-section notes-block">
       <h2>Notes</h2>
       <textarea
         className="notes-text"
         value={character.notes}
         onChange={(e) => onChange({ notes: e.target.value })}
       />
-    </footer>
+    </section>
   );
 }

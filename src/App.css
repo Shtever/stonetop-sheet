@@ -59,13 +59,7 @@
   display: none;
 }
 
-.sheet-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-
-.sheet-column {
+.sheet-tab-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -76,12 +70,6 @@
   border-bottom: 1px solid var(--paper-rule);
   padding-bottom: 0.25rem;
   margin-bottom: 0.5rem;
-}
-
-.sheet-footer {
-  margin-top: 1.5rem;
-  border-top: 2px solid var(--paper-ink);
-  padding-top: 0.5rem;
 }
 
 .notes-text {
@@ -231,12 +219,61 @@
   margin: 0 0 0.5rem;
 }
 
-/* Collapse to one column in portrait, per PLAN.md UI layout rules */
-@media (max-width: 800px) {
-  .sheet-columns {
-    grid-template-columns: 1fr;
-  }
+/* NPCs */
+.npcs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.75rem;
+}
 
+.npcs-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--paper-accent);
+  border-bottom: 1px solid var(--paper-rule);
+  padding: 0.25rem 0.5rem 0.25rem 0;
+}
+
+.npcs-table td {
+  border-bottom: 1px solid var(--paper-rule);
+  padding: 0.25rem 0.5rem 0.25rem 0;
+}
+
+.npcs-table input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--paper-ink);
+  padding: 0.35rem 0.1rem;
+}
+
+.npcs-table input:focus {
+  outline: none;
+}
+
+.npc-remove {
+  min-width: 44px;
+  min-height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--paper-accent);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.npc-add {
+  border: 1px solid var(--paper-ink);
+  background: transparent;
+  color: var(--paper-ink);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+/* Collapse header fields to two columns on narrow screens, per PLAN.md */
+@media (max-width: 800px) {
   .sheet-header-top,
   .sheet-header-grid {
     grid-template-columns: 1fr 1fr;

@@ -31,6 +31,7 @@ export function newCharacter(): Character {
     inventory: [],
 
     bonds: [],
+    npcs: [],
     notes: '',
   };
 }

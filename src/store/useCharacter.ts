@@ -23,7 +23,9 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
   init: async () => {
     const saved = await loadLastCharacter();
     if (saved) {
-      set({ character: saved, loaded: true });
+      // Backfill fields added to the model after this record was saved.
+      const character = { ...newCharacter(), ...saved };
+      set({ character, loaded: true });
       return;
     }
     const seeded = await loadSeedCharacter();

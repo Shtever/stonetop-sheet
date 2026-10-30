@@ -31,6 +31,13 @@ export interface ResourceGroup {
   stock?: { current: number; max: number }; // e.g. Sacred Pouch stock boxes
 }
 
+export interface Npc {
+  id: string;
+  name: string;
+  occupation: string;
+  details: string;
+}
+
 export interface Item {
   id: string;
   name: string;
@@ -70,5 +77,6 @@ export interface Character {
   inventory: Item[];
 
   bonds: string[];
+  npcs: Npc[];
   notes: string;
 }

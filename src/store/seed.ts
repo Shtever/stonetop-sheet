@@ -1,4 +1,5 @@
 import type { Character } from '../model/types';
+import { newCharacter } from '../model/factory';
 
 // Looks for a local-only seed character at public/templates/*.json (gitignored,
 // per CLAUDE.md: don't commit Stonetop character/rulebook content). Returns
@@ -8,7 +9,9 @@ export async function loadSeedCharacter(): Promise<Character | undefined> {
     const res = await fetch(`${import.meta.env.BASE_URL}templates/seed-character.json`);
     if (!res.ok) return undefined;
     const data = (await res.json()) as Partial<Character>;
-    return { ...data, id: crypto.randomUUID(), updatedAt: new Date().toISOString() } as Character;
+    // Merge over a fresh default so fields the seed file omits (e.g. added
+    // after the seed was written) still have safe defaults.
+    return { ...newCharacter(), ...data, id: crypto.randomUUID(), updatedAt: new Date().toISOString() };
   } catch {
     return undefined;
   }

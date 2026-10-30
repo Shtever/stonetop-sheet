@@ -1,22 +1,21 @@
 # Stonetop Character Sheet App — To Do List
 
 ## overall
--roll back the last change you made to the card height.
+
 
 ## About character section ##
-- no changes
 
 ## Moves section
- - 'Sacred Tongue' and 'Borrow Power' are two different moves Split them into separate entries.
+
 
 ## inventory tab
-- remove my "own work, Drakescale, unadorned, and 'unnattural..." spells. Only Sacred Pouch, Stock, and description field should remain under spells & resources.
+- Make this into sub tabs like the notes section. The sub tabs should be Inventory, Special posessions, and Resources. The herb garden, Mastiffs, and Sacred pouch should go into the special posessions tab.
 
 ## followers tab
--add a submit/done button so the tags may be saved.
+- the 'done' button doesn't do anything. Make it save/confirm changes 
 
 ## npc tab
 -no changes
 
 ## notes tab
--resize the To Do:add item & Journal: add entry so they are the same size as the Documents:add document button 
+- Journal: Add done/submit button to save journal entries so they can't accidentally be typed over or edited by mistake.

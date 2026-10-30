@@ -31,8 +31,7 @@ export default function ResourceGroups({ character, onChange }: Props) {
   };
 
   return (
-    <section className="sheet-section resource-groups">
-      <h2>Spells &amp; Resources</h2>
+    <div className="resource-groups">
       {character.resources.map((group) => (
         <div key={group.id} className="resource-group">
           <div className="resource-group-header">
@@ -91,6 +90,6 @@ export default function ResourceGroups({ character, onChange }: Props) {
           ))}
         </div>
       ))}
-    </section>
+    </div>
   );
 }

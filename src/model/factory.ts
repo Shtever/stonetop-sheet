@@ -1,4 +1,4 @@
-import type { Character, DocumentEntry, JournalEntry, Move, ResourceGroup, TodoItem } from './types';
+import type { Character, DocumentEntry, Item, JournalEntry, Move, ResourceGroup, TodoItem } from './types';
 import { xpNeededForLevel } from './rules';
 
 export function newCharacter(): Character {
@@ -64,6 +64,7 @@ export function normalizeCharacter(data: Partial<Character> | Record<string, unk
   merged.followers = (merged.followers ?? []).map((f) => ({ ...f, description: f.description ?? '' }));
   merged.resources = migrateResources(merged.resources);
   merged.moves = migrateMoves(merged.moves);
+  merged.inventory = migrateInventory(merged.inventory);
 
   merged.schemaVersion = 4;
   return merged;
@@ -105,6 +106,17 @@ function migrateResources(groups: ResourceGroup[]): ResourceGroup[] {
     }
     return { description: g.description ?? '', ...g };
   });
+}
+
+// Items that were in the generic Inventory list before Special Possessions
+// existed — mark them special so they land in the right tab on an
+// already-saved character, not just a fresh seed.
+const SPECIAL_ITEM_NAMES = new Set(['Herb garden', 'Mastiffs: Mud & Obra', 'Sacred Pouch']);
+
+function migrateInventory(items: Item[]): Item[] {
+  return (items ?? []).map((i) =>
+    i.special === undefined && SPECIAL_ITEM_NAMES.has(i.name) ? { ...i, special: true } : i,
+  );
 }
 
 function migrateTodo(raw: unknown): TodoItem[] {

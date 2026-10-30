@@ -4,19 +4,23 @@ import TagsInput from '../ui/TagsInput';
 interface Props {
   character: Character;
   onChange: (patch: Partial<Character>) => void;
+  /** Which half of character.inventory this table shows and adds to. */
+  special: boolean;
 }
 
-function emptyItem(): Item {
-  return { id: crypto.randomUUID(), name: '', notes: '', weight: 0, carried: true, tags: [] };
+function emptyItem(special: boolean): Item {
+  return { id: crypto.randomUUID(), name: '', notes: '', weight: 0, carried: true, tags: [], special };
 }
 
-export default function InventoryList({ character, onChange }: Props) {
+export default function InventoryList({ character, onChange, special }: Props) {
+  const items = character.inventory.filter((i) => Boolean(i.special) === special);
+
   const updateItem = (id: string, patch: Partial<Item>) => {
     onChange({ inventory: character.inventory.map((i) => (i.id === id ? { ...i, ...patch } : i)) });
   };
 
   const addItem = () => {
-    onChange({ inventory: [...character.inventory, emptyItem()] });
+    onChange({ inventory: [...character.inventory, emptyItem(special)] });
   };
 
   const removeItem = (id: string) => {
@@ -24,8 +28,7 @@ export default function InventoryList({ character, onChange }: Props) {
   };
 
   return (
-    <section className="sheet-section inventory-list">
-      <h2>Inventory</h2>
+    <div className="inventory-list">
       <table className="npcs-table">
         <thead>
           <tr>
@@ -36,7 +39,7 @@ export default function InventoryList({ character, onChange }: Props) {
           </tr>
         </thead>
         <tbody>
-          {character.inventory.map((item) => (
+          {items.map((item) => (
             <tr key={item.id}>
               <td>
                 <input value={item.name} onChange={(e) => updateItem(item.id, { name: e.target.value })} />
@@ -59,6 +62,6 @@ export default function InventoryList({ character, onChange }: Props) {
       <button type="button" className="npc-add" onClick={addItem}>
         + Add item
       </button>
-    </section>
+    </div>
   );
 }

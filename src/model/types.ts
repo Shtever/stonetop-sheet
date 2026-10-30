@@ -80,6 +80,7 @@ export interface Item {
   carried: boolean;
   uses?: { total: number; marked: number };
   tags: string[];
+  special?: boolean; // shown under Special Possessions instead of Inventory
 }
 
 export interface Character {

@@ -7,8 +7,7 @@ import IdentityHeader from './components/sheet/IdentityHeader';
 import StatsBlock from './components/sheet/StatsBlock';
 import HpBlock from './components/sheet/HpBlock';
 import MovesList from './components/sheet/MovesList';
-import ResourceGroups from './components/sheet/ResourceGroups';
-import InventoryList from './components/sheet/InventoryList';
+import InventoryTabs from './components/sheet/InventoryTabs';
 import NpcsBlock from './components/sheet/NpcsBlock';
 import FollowersBlock from './components/sheet/FollowersBlock';
 import NotesBlock from './components/sheet/NotesBlock';
@@ -44,12 +43,7 @@ export default function App() {
 
         {tab === 'Moves' && <MovesList character={character} onChange={update} />}
 
-        {tab === 'Inventory' && (
-          <>
-            <InventoryList character={character} onChange={update} />
-            <ResourceGroups character={character} onChange={update} />
-          </>
-        )}
+        {tab === 'Inventory' && <InventoryTabs character={character} onChange={update} />}
 
         {tab === 'Followers' && <FollowersBlock character={character} onChange={update} />}
 

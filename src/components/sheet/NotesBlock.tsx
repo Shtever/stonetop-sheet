@@ -120,6 +120,10 @@ function formatDate(iso: string): string {
 
 function JournalPage({ character, onChange }: Props) {
   const entries = character.notes.journal;
+  // Journal text is locked (read-only) by default so a stray tap can't
+  // edit or erase it, same as Moves; "Edit" unlocks it, "Done" submits and
+  // locks it again. A freshly added entry starts unlocked for typing.
+  const [editing, setEditing] = useState<Set<string>>(new Set());
 
   const updateEntry = (id: string, text: string) => {
     onChange({ notes: { ...character.notes, journal: entries.map((e) => (e.id === id ? { ...e, text } : e)) } });
@@ -128,10 +132,20 @@ function JournalPage({ character, onChange }: Props) {
   const addEntry = () => {
     const entry: JournalEntry = { id: crypto.randomUUID(), date: new Date().toISOString(), text: '' };
     onChange({ notes: { ...character.notes, journal: [entry, ...entries] } });
+    setEditing((prev) => new Set(prev).add(entry.id));
   };
 
   const removeEntry = (id: string) => {
     onChange({ notes: { ...character.notes, journal: entries.filter((e) => e.id !== id) } });
+  };
+
+  const toggleEditing = (id: string) => {
+    setEditing((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   };
 
   return (
@@ -139,26 +153,33 @@ function JournalPage({ character, onChange }: Props) {
       <button type="button" className="npc-add" onClick={addEntry}>
         + Add entry
       </button>
-      {entries.map((entry) => (
-        <div key={entry.id} className="journal-entry">
-          <div className="journal-entry-header">
-            <span className="journal-entry-date">{formatDate(entry.date)}</span>
-            <button
-              type="button"
-              className="npc-remove"
-              onClick={() => removeEntry(entry.id)}
-              aria-label="Remove journal entry"
-            >
-              ×
-            </button>
+      {entries.map((entry) => {
+        const isEditing = editing.has(entry.id);
+        return (
+          <div key={entry.id} className="journal-entry">
+            <div className="journal-entry-header">
+              <span className="journal-entry-date">{formatDate(entry.date)}</span>
+              <button type="button" className="move-edit-toggle" onClick={() => toggleEditing(entry.id)}>
+                {isEditing ? 'Done' : 'Edit'}
+              </button>
+              <button
+                type="button"
+                className="npc-remove"
+                onClick={() => removeEntry(entry.id)}
+                aria-label="Remove journal entry"
+              >
+                ×
+              </button>
+            </div>
+            <textarea
+              className="notes-text journal-entry-text"
+              value={entry.text}
+              readOnly={!isEditing}
+              onChange={(e) => updateEntry(entry.id, e.target.value)}
+            />
           </div>
-          <textarea
-            className="notes-text journal-entry-text"
-            value={entry.text}
-            onChange={(e) => updateEntry(entry.id, e.target.value)}
-          />
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

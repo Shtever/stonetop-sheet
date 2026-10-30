@@ -1,6 +1,4 @@
 import type { Character } from '../../model/types';
-import Stepper from '../ui/Stepper';
-import InlineField from '../ui/InlineField';
 
 interface Props {
   character: Character;
@@ -8,34 +6,57 @@ interface Props {
 }
 
 export default function HpBlock({ character, onChange }: Props) {
+  const setHp = (current: number) => {
+    const clamped = Math.max(0, Math.min(character.hp.max, current));
+    onChange({ hp: { ...character.hp, current: clamped } });
+  };
+
   return (
     <section className="sheet-section hp-block">
       <h2>HP, Armor &amp; Damage</h2>
-      <div className="hp-row">
-        <Stepper
-          label={`HP (of ${character.hp.max})`}
-          value={character.hp.current}
-          min={0}
-          max={character.hp.max}
-          onChange={(current) => onChange({ hp: { ...character.hp, current } })}
-        />
-      </div>
-      <div className="hp-row-secondary">
-        <InlineField
-          label="Max HP"
-          value={String(character.hp.max)}
-          onChange={(v) => onChange({ hp: { ...character.hp, max: Number(v) || 0 } })}
-        />
-        <InlineField
-          label="Armor"
-          value={String(character.armor)}
-          onChange={(v) => onChange({ armor: Number(v) || 0 })}
-        />
-        <InlineField
-          label="Damage"
-          value={character.damageDie}
-          onChange={(damageDie) => onChange({ damageDie })}
-        />
+      <div className="hp-strip">
+        <div className="hp-current">
+          <button type="button" onClick={() => setHp(character.hp.current - 1)} aria-label="Decrease HP">
+            −
+          </button>
+          <input
+            className="hp-current-value"
+            type="number"
+            value={character.hp.current}
+            onChange={(e) => setHp(Number(e.target.value) || 0)}
+          />
+          <button type="button" onClick={() => setHp(character.hp.current + 1)} aria-label="Increase HP">
+            +
+          </button>
+          <span className="hp-max">
+            / &nbsp;
+            <input
+              className="hp-max-value"
+              type="number"
+              value={character.hp.max}
+              onChange={(e) => onChange({ hp: { ...character.hp, max: Number(e.target.value) || 0 } })}
+            />
+          </span>
+          <span className="stat-key">HP</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-key">Armor</span>
+          <input
+            className="stat-modifier"
+            type="number"
+            value={character.armor}
+            onChange={(e) => onChange({ armor: Number(e.target.value) || 0 })}
+          />
+        </div>
+        <div className="stat-box">
+          <span className="stat-key">Damage</span>
+          <input
+            className="stat-modifier stat-modifier-text"
+            type="text"
+            value={character.damageDie}
+            onChange={(e) => onChange({ damageDie: e.target.value })}
+          />
+        </div>
       </div>
     </section>
   );

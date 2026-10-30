@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Character } from '../model/types';
-import { newCharacter } from '../model/factory';
+import { newCharacter, normalizeCharacter } from '../model/factory';
 import { saveCharacter, loadLastCharacter } from './db';
 import { loadSeedCharacter } from './seed';
 
@@ -23,8 +23,7 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
   init: async () => {
     const saved = await loadLastCharacter();
     if (saved) {
-      // Backfill fields added to the model after this record was saved.
-      const character = { ...newCharacter(), ...saved };
+      const character = normalizeCharacter(saved);
       set({ character, loaded: true });
       return;
     }

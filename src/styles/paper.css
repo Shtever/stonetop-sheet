@@ -1,8 +1,9 @@
 :root {
-  --paper-bg: #f3ead9;
+  --paper-bg: #f3e9d7;
   --paper-ink: #2b2420;
   --paper-rule: #b8a888;
   --paper-accent: #7a3b2e;
+  --page-bg: #1c1a17;
 }
 
 * {
@@ -12,9 +13,20 @@
 html,
 body {
   margin: 0;
-  background: var(--paper-bg);
+  min-height: 100%;
+  background: var(--page-bg);
   color: var(--paper-ink);
   font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+
+#root {
+  width: 100%;
+  max-width: 1100px;
 }
 
 h1,

@@ -41,6 +41,7 @@ export default function ResourceGroups({ character, onChange }: Props) {
                 <BoxTrack
                   total={group.stock.max}
                   marked={group.stock.current}
+                  size="compact"
                   onChange={(current) => setStock(group.id, current)}
                 />
               </div>
@@ -54,6 +55,7 @@ export default function ResourceGroups({ character, onChange }: Props) {
                   label="Prepared"
                   checked={entry.prepared}
                   onChange={(prepared) => updateEntry(group.id, entry.id, { prepared })}
+                  size="compact"
                 />
               )}
               {entry.used !== undefined && (
@@ -61,6 +63,7 @@ export default function ResourceGroups({ character, onChange }: Props) {
                   label="Used"
                   checked={entry.used}
                   onChange={(used) => updateEntry(group.id, entry.id, { used })}
+                  size="compact"
                 />
               )}
             </div>

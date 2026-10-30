@@ -15,6 +15,10 @@ export default function InventoryList({ character, onChange }: Props) {
     });
   };
 
+  const setNotes = (id: string, notes: string) => {
+    onChange({ inventory: character.inventory.map((i) => (i.id === id ? { ...i, notes } : i)) });
+  };
+
   return (
     <section className="sheet-section inventory-list">
       <h2>Inventory</h2>
@@ -22,7 +26,19 @@ export default function InventoryList({ character, onChange }: Props) {
       <ul>
         {character.inventory.map((item) => (
           <li key={item.id} className="inventory-item">
-            <Checkbox label={item.name} checked={item.carried} onChange={() => toggleCarried(item.id)} />
+            <Checkbox
+              label={item.name}
+              checked={item.carried}
+              onChange={() => toggleCarried(item.id)}
+              size="compact"
+            />
+            <input
+              className="inventory-item-notes"
+              type="text"
+              placeholder="Notes"
+              value={item.notes}
+              onChange={(e) => setNotes(item.id, e.target.value)}
+            />
           </li>
         ))}
       </ul>

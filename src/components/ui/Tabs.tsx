@@ -4,11 +4,12 @@ interface TabsProps {
   tabs: readonly string[];
   active: string;
   onChange: (tab: string) => void;
+  className?: string;
 }
 
-export default function Tabs({ tabs, active, onChange }: TabsProps) {
+export default function Tabs({ tabs, active, onChange, className }: TabsProps) {
   return (
-    <div className="tabs" role="tablist">
+    <div className={className ? `tabs ${className}` : 'tabs'} role="tablist">
       {tabs.map((tab) => (
         <button
           key={tab}

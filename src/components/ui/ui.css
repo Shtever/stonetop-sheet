@@ -33,6 +33,17 @@
   cursor: pointer;
 }
 
+.paper-checkbox.compact input[type='checkbox'] {
+  min-width: 0;
+  min-height: 0;
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.paper-checkbox.compact span {
+  font-size: 0.95rem;
+}
+
 .stepper {
   display: flex;
   align-items: center;
@@ -88,6 +99,13 @@
   border-color: var(--paper-accent);
 }
 
+.box-track.compact .box-track-box {
+  width: 1.1em;
+  height: 1.1em;
+  min-width: 0;
+  min-height: 0;
+}
+
 .tabs {
   display: flex;
   gap: 0.25rem;
@@ -113,4 +131,15 @@
   color: var(--paper-accent);
   border-bottom-color: var(--paper-accent);
   font-weight: 600;
+}
+
+.tabs.sub-tabs {
+  border-bottom-width: 1px;
+  margin-bottom: 0.75rem;
+}
+
+.tabs.sub-tabs .tab {
+  min-height: 36px;
+  font-size: 0.9rem;
+  padding: 0 0.75rem;
 }

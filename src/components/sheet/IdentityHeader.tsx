@@ -1,5 +1,6 @@
 import type { Character } from '../../model/types';
 import InlineField from '../ui/InlineField';
+import XpBlock from './XpBlock';
 
 interface Props {
   character: Character;
@@ -21,6 +22,7 @@ export default function IdentityHeader({ character, onChange }: Props) {
           value={String(character.level)}
           onChange={(v) => onChange({ level: Number(v) || 1 })}
         />
+        <XpBlock character={character} onChange={onChange} />
       </div>
       <div className="sheet-header-grid">
         <InlineField
@@ -40,11 +42,18 @@ export default function IdentityHeader({ character, onChange }: Props) {
           onChange={(instinct) => onChange({ instinct })}
         />
       </div>
-      <InlineField
-        label="Appearance"
-        value={character.appearance}
-        onChange={(appearance) => onChange({ appearance })}
-      />
+      <div className="sheet-header-grid">
+        <InlineField
+          label="Appearance"
+          value={character.appearance}
+          onChange={(appearance) => onChange({ appearance })}
+        />
+        <InlineField
+          label="Bonds"
+          value={character.bonds.join(' / ')}
+          onChange={(v) => onChange({ bonds: v.split('/').map((s) => s.trim()).filter(Boolean) })}
+        />
+      </div>
     </header>
   );
 }

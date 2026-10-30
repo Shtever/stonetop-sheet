@@ -38,6 +38,20 @@ export interface Npc {
   details: string;
 }
 
+export interface Follower {
+  id: string;
+  name: string;
+  hp: { current: number; max: number };
+  damage: string; // e.g. 'd6'
+  tags: string[];
+}
+
+export interface NotesPages {
+  todo: string;
+  journal: string;
+  documents: string;
+}
+
 export interface Item {
   id: string;
   name: string;
@@ -50,7 +64,7 @@ export interface Item {
 
 export interface Character {
   id: string;
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
   updatedAt: string; // ISO date
 
   name: string;
@@ -78,5 +92,6 @@ export interface Character {
 
   bonds: string[];
   npcs: Npc[];
-  notes: string;
+  followers: Follower[];
+  notes: NotesPages;
 }

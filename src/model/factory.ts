@@ -4,7 +4,7 @@ import { xpNeededForLevel } from './rules';
 export function newCharacter(): Character {
   return {
     id: crypto.randomUUID(),
-    schemaVersion: 1,
+    schemaVersion: 2,
     updatedAt: new Date().toISOString(),
 
     name: '',
@@ -32,6 +32,26 @@ export function newCharacter(): Character {
 
     bonds: [],
     npcs: [],
-    notes: '',
+    followers: [],
+    notes: { todo: '', journal: '', documents: '' },
   };
+}
+
+// Backfills fields added after a record was saved, and migrates the old
+// schemaVersion 1 shape (notes as a single string) to schemaVersion 2
+// (notes split into todo/journal/documents pages).
+export function normalizeCharacter(data: Partial<Character> | Record<string, unknown>): Character {
+  const base = newCharacter();
+  const input = data as Partial<Character>;
+  const merged: Character = { ...base, ...input, id: input.id ?? base.id };
+
+  const rawNotes = (data as Record<string, unknown>).notes;
+  if (typeof rawNotes === 'string') {
+    merged.notes = { todo: '', journal: rawNotes, documents: '' };
+  } else if (rawNotes && typeof rawNotes === 'object') {
+    merged.notes = { ...base.notes, ...(rawNotes as Partial<Character['notes']>) };
+  }
+
+  merged.schemaVersion = 2;
+  return merged;
 }

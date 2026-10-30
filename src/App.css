@@ -1,6 +1,11 @@
+/* min-height (not height) + no overflow clipping, so a tall tab can still
+   grow the card and scroll with the page normally. The action bar uses
+   margin-top: auto below to sit at the bottom whenever there's slack. */
 .sheet {
   width: 100%;
   min-height: calc(100dvh - 1rem);
+  display: flex;
+  flex-direction: column;
   background: var(--paper-bg);
   margin-block: 0.5rem;
   margin-inline: 1rem;
@@ -75,12 +80,14 @@
   font-size: 0.8rem;
 }
 
-/* Bottom action bar */
+/* Bottom action bar — pinned to the bottom of the card when content is
+   short; just follows the content (still at the card's true bottom) when
+   a tab is long enough to need scrolling. */
 .sheet-actions {
   display: flex;
   gap: 0.5rem;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: auto;
   padding-top: 0.5rem;
   border-top: 1px solid var(--paper-rule);
 }

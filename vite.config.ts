@@ -11,6 +11,12 @@ export default defineConfig({
     VitePWA({
       // Manifest icons are added in Phase 5 (PWA polish) once real art exists.
       registerType: 'autoUpdate',
+      workbox: {
+        // Default globPatterns omit font files — without this the bundled
+        // Alegreya/Noto Sans Symbols fonts would need a network request on
+        // first offline load instead of being precached like everything else.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+      },
       manifest: {
         name: 'Stonetop Character Sheet',
         short_name: 'Stonetop',

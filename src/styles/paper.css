@@ -1,9 +1,13 @@
+@import './fonts.css';
+
 :root {
   --paper-bg: #f3e9d7;
   --paper-ink: #2b2420;
   --paper-rule: #b8a888;
   --paper-accent: #7a3b2e;
   --page-bg: #1c1a17;
+  --font-body: 'Alegreya', 'Noto Sans Symbols 2', 'Noto Sans Symbols', serif;
+  --font-heading: 'Alegreya SC', 'Noto Sans Symbols 2', 'Noto Sans Symbols', serif;
 }
 
 * {
@@ -16,7 +20,7 @@ body {
   min-height: 100%;
   background: var(--page-bg);
   color: var(--paper-ink);
-  font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  font-family: var(--font-body);
 }
 
 body {
@@ -35,8 +39,9 @@ body {
 h1,
 h2,
 h3 {
-  font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  font-weight: 600;
+  font-family: var(--font-heading);
+  /* Alegreya SC ships 400/500/700/800/900, not 600 — 700 avoids a faux-bold fallback. */
+  font-weight: 700;
   margin: 0;
 }
 

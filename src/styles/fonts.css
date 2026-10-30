@@ -1,0 +1,21 @@
+/* Bundled locally (via @fontsource) so the PWA works fully offline — no
+   Google Fonts CDN request. Only the weights actually used are imported:
+   Alegreya 400 (body text), 600 (e.g. the XP "Level up!" callout), 700
+   (bold move names); Alegreya SC 700 (headings). Noto Sans Symbols /
+   Symbols 2 fill in any glyph outside Alegreya's own coverage. */
+
+/* Alegreya — body */
+@import '@fontsource/alegreya/latin-400.css';
+@import '@fontsource/alegreya/latin-600.css';
+@import '@fontsource/alegreya/latin-700.css';
+@import '@fontsource/alegreya/latin-ext-400.css';
+@import '@fontsource/alegreya/latin-ext-600.css';
+@import '@fontsource/alegreya/latin-ext-700.css';
+
+/* Alegreya SC — headings */
+@import '@fontsource/alegreya-sc/latin-700.css';
+@import '@fontsource/alegreya-sc/latin-ext-700.css';
+
+/* Symbol fallbacks */
+@import '@fontsource/noto-sans-symbols-2/symbols-400.css';
+@import '@fontsource/noto-sans-symbols/symbols-400.css';

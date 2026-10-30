@@ -27,6 +27,7 @@ export interface ResourceEntry {
 export interface ResourceGroup {
   id: string;
   label: string; // 'Invocations', 'Sacred Pouch', ...
+  description?: string; // flavor text for the group as a whole
   entries: ResourceEntry[];
   stock?: { current: number; max: number }; // e.g. Sacred Pouch stock boxes
 }
@@ -59,10 +60,16 @@ export interface DocumentEntry {
   description: string;
 }
 
+export interface JournalEntry {
+  id: string;
+  date: string; // ISO date
+  text: string;
+}
+
 export interface NotesPages {
   todo: TodoItem[];
-  journal: string;
   documents: DocumentEntry[];
+  journal: JournalEntry[];
 }
 
 export interface Item {
@@ -77,7 +84,7 @@ export interface Item {
 
 export interface Character {
   id: string;
-  schemaVersion: 1 | 2 | 3;
+  schemaVersion: 1 | 2 | 3 | 4;
   updatedAt: string; // ISO date
 
   name: string;

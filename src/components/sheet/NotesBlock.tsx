@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Character, DocumentEntry, TodoItem } from '../../model/types';
+import type { Character, DocumentEntry, JournalEntry, TodoItem } from '../../model/types';
 import Tabs from '../ui/Tabs';
 import Checkbox from '../ui/Checkbox';
 
@@ -8,14 +8,20 @@ interface Props {
   onChange: (patch: Partial<Character>) => void;
 }
 
-const PAGES = ['To Do', 'Journal', 'Documents'] as const;
+const PAGES = ['To Do', 'Documents', 'Journal'] as const;
 type Page = (typeof PAGES)[number];
 
 function ToDoPage({ character, onChange }: Props) {
   const items = character.notes.todo;
 
   const updateItem = (id: string, patch: Partial<TodoItem>) => {
-    onChange({ notes: { ...character.notes, todo: items.map((t) => (t.id === id ? { ...t, ...patch } : t)) } });
+    let next = items.map((t) => (t.id === id ? { ...t, ...patch } : t));
+    // Completed items sink to the bottom of the list.
+    if (patch.done) {
+      const item = next.find((t) => t.id === id)!;
+      next = [...next.filter((t) => t.id !== id), item];
+    }
+    onChange({ notes: { ...character.notes, todo: next } });
   };
 
   const addItem = () => {
@@ -107,6 +113,56 @@ function DocumentsPage({ character, onChange }: Props) {
   );
 }
 
+function formatDate(iso: string): string {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString();
+}
+
+function JournalPage({ character, onChange }: Props) {
+  const entries = character.notes.journal;
+
+  const updateEntry = (id: string, text: string) => {
+    onChange({ notes: { ...character.notes, journal: entries.map((e) => (e.id === id ? { ...e, text } : e)) } });
+  };
+
+  const addEntry = () => {
+    const entry: JournalEntry = { id: crypto.randomUUID(), date: new Date().toISOString(), text: '' };
+    onChange({ notes: { ...character.notes, journal: [entry, ...entries] } });
+  };
+
+  const removeEntry = (id: string) => {
+    onChange({ notes: { ...character.notes, journal: entries.filter((e) => e.id !== id) } });
+  };
+
+  return (
+    <div className="journal-list">
+      <button type="button" className="npc-add" onClick={addEntry}>
+        + Add entry
+      </button>
+      {entries.map((entry) => (
+        <div key={entry.id} className="journal-entry">
+          <div className="journal-entry-header">
+            <span className="journal-entry-date">{formatDate(entry.date)}</span>
+            <button
+              type="button"
+              className="npc-remove"
+              onClick={() => removeEntry(entry.id)}
+              aria-label="Remove journal entry"
+            >
+              ×
+            </button>
+          </div>
+          <textarea
+            className="notes-text journal-entry-text"
+            value={entry.text}
+            onChange={(e) => updateEntry(entry.id, e.target.value)}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function NotesBlock({ character, onChange }: Props) {
   const [page, setPage] = useState<Page>('To Do');
 
@@ -116,16 +172,8 @@ export default function NotesBlock({ character, onChange }: Props) {
       <Tabs tabs={PAGES} active={page} onChange={(p) => setPage(p as Page)} className="sub-tabs" />
 
       {page === 'To Do' && <ToDoPage character={character} onChange={onChange} />}
-
-      {page === 'Journal' && (
-        <textarea
-          className="notes-text"
-          value={character.notes.journal}
-          onChange={(e) => onChange({ notes: { ...character.notes, journal: e.target.value } })}
-        />
-      )}
-
       {page === 'Documents' && <DocumentsPage character={character} onChange={onChange} />}
+      {page === 'Journal' && <JournalPage character={character} onChange={onChange} />}
     </section>
   );
 }

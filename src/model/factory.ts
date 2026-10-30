@@ -1,10 +1,10 @@
-import type { Character, DocumentEntry, TodoItem } from './types';
+import type { Character, DocumentEntry, JournalEntry, TodoItem } from './types';
 import { xpNeededForLevel } from './rules';
 
 export function newCharacter(): Character {
   return {
     id: crypto.randomUUID(),
-    schemaVersion: 3,
+    schemaVersion: 4,
     updatedAt: new Date().toISOString(),
 
     name: '',
@@ -33,7 +33,7 @@ export function newCharacter(): Character {
     bonds: [],
     npcs: [],
     followers: [],
-    notes: { todo: [], journal: '', documents: [] },
+    notes: { todo: [], documents: [], journal: [] },
   };
 }
 
@@ -42,6 +42,7 @@ export function newCharacter(): Character {
 //   1 -> 2: notes was a single string -> split into todo/journal/documents.
 //   2 -> 3: notes.todo was a string -> checklist items; notes.documents was
 //           a string -> {name, description} entries.
+//   3 -> 4: notes.journal was a string -> dated journal entries.
 export function normalizeCharacter(data: Partial<Character> | Record<string, unknown>): Character {
   const base = newCharacter();
   const input = data as Partial<Character>;
@@ -51,17 +52,19 @@ export function normalizeCharacter(data: Partial<Character> | Record<string, unk
 
   if (typeof rawNotes === 'string') {
     // schemaVersion 1: notes was one free-text field.
-    merged.notes = { todo: [], journal: rawNotes, documents: [] };
+    merged.notes = { todo: [], documents: [], journal: migrateJournal(rawNotes) };
   } else if (rawNotes && typeof rawNotes === 'object') {
-    const todo = migrateTodo(rawNotes.todo);
-    const documents = migrateDocuments(rawNotes.documents);
-    const journal = typeof rawNotes.journal === 'string' ? rawNotes.journal : base.notes.journal;
-    merged.notes = { todo, journal, documents };
+    merged.notes = {
+      todo: migrateTodo(rawNotes.todo),
+      documents: migrateDocuments(rawNotes.documents),
+      journal: migrateJournal(rawNotes.journal),
+    };
   }
 
   merged.followers = (merged.followers ?? []).map((f) => ({ ...f, description: f.description ?? '' }));
+  merged.resources = (merged.resources ?? []).map((g) => ({ description: '', ...g }));
 
-  merged.schemaVersion = 3;
+  merged.schemaVersion = 4;
   return merged;
 }
 
@@ -77,6 +80,14 @@ function migrateDocuments(raw: unknown): DocumentEntry[] {
   if (Array.isArray(raw)) return raw as DocumentEntry[];
   if (typeof raw === 'string' && raw.trim()) {
     return [{ id: crypto.randomUUID(), name: 'Untitled', description: raw }];
+  }
+  return [];
+}
+
+function migrateJournal(raw: unknown): JournalEntry[] {
+  if (Array.isArray(raw)) return raw as JournalEntry[];
+  if (typeof raw === 'string' && raw.trim()) {
+    return [{ id: crypto.randomUUID(), date: new Date().toISOString(), text: raw }];
   }
   return [];
 }

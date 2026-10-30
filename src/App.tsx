@@ -34,7 +34,7 @@ export default function App() {
 
       <Tabs tabs={TABS} active={tab} onChange={(t) => setTab(t as Tab)} />
 
-      <main className="sheet-tab-content">
+      <main className="sheet-tab-content sheet-scroll">
         {tab === 'Character' && (
           <>
             <StatsBlock character={character} onChange={update} />

@@ -1,4 +1,4 @@
-import type { Character, ResourceEntry } from '../../model/types';
+import type { Character, ResourceEntry, ResourceGroup } from '../../model/types';
 import Checkbox from '../ui/Checkbox';
 import BoxTrack from '../ui/BoxTrack';
 
@@ -8,6 +8,10 @@ interface Props {
 }
 
 export default function ResourceGroups({ character, onChange }: Props) {
+  const updateGroup = (groupId: string, patch: Partial<ResourceGroup>) => {
+    onChange({ resources: character.resources.map((g) => (g.id === groupId ? { ...g, ...patch } : g)) });
+  };
+
   const updateEntry = (groupId: string, entryId: string, patch: Partial<ResourceEntry>) => {
     onChange({
       resources: character.resources.map((g) =>
@@ -47,6 +51,14 @@ export default function ResourceGroups({ character, onChange }: Props) {
               </div>
             )}
           </div>
+          {group.description !== undefined && (
+            <textarea
+              className="resource-group-description"
+              placeholder="Description"
+              value={group.description}
+              onChange={(e) => updateGroup(group.id, { description: e.target.value })}
+            />
+          )}
           {group.entries.map((entry) => (
             <div key={entry.id} className="resource-entry">
               <div className="resource-entry-row">

@@ -1,4 +1,5 @@
 import type { Character, Follower } from '../../model/types';
+import TagsInput from '../ui/TagsInput';
 
 interface Props {
   character: Character;
@@ -89,15 +90,10 @@ export default function FollowersBlock({ character, onChange }: Props) {
             </label>
             <label className="follower-field follower-field-tags">
               <span className="inline-field-label">Tags</span>
-              <input
-                type="text"
+              <TagsInput
                 placeholder="comma, separated"
-                value={follower.tags.join(', ')}
-                onChange={(e) =>
-                  updateFollower(follower.id, {
-                    tags: e.target.value.split(',').map((t) => t.trim()).filter(Boolean),
-                  })
-                }
+                value={follower.tags}
+                onChange={(tags) => updateFollower(follower.id, { tags })}
               />
             </label>
           </div>

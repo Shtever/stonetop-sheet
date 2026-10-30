@@ -1,6 +1,12 @@
+/* Fixed-height card (same height on every tab): header/tabs/actions stay
+   put, only the middle content area scrolls. Keeps the JSON buttons
+   pinned at the bottom instead of trailing off after long tab content. */
 .sheet {
   width: 100%;
-  min-height: calc(100dvh - 1rem);
+  height: calc(100dvh - 1rem);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: var(--paper-bg);
   margin-block: 0.5rem;
   margin-inline: 1rem;
@@ -75,12 +81,13 @@
   font-size: 0.8rem;
 }
 
-/* Bottom action bar */
+/* Bottom action bar — always visible, never scrolled out of view */
 .sheet-actions {
+  flex: 0 0 auto;
   display: flex;
   gap: 0.5rem;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   padding-top: 0.5rem;
   border-top: 1px solid var(--paper-rule);
 }
@@ -110,6 +117,12 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+.sheet-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .sheet-section h2 {
@@ -352,42 +365,19 @@
   border-bottom-color: var(--paper-accent);
 }
 
-/* Inventory */
-.inventory-list ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.inventory-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.3rem;
-}
-
-.inventory-item-notes {
-  flex: 1;
-  border: none;
-  border-bottom: 1px solid var(--paper-rule);
+.resource-group-description {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--paper-rule);
   background: transparent;
   color: var(--paper-ink);
-  font-size: 0.85rem;
-  padding: 0.15rem 0.1rem;
+  font-size: 0.9rem;
+  padding: 0.4rem;
+  margin-bottom: 0.5rem;
+  resize: vertical;
 }
 
-.inventory-item-notes:focus {
-  outline: none;
-  border-bottom-color: var(--paper-accent);
-}
-
-.load-meter {
-  font-size: 0.85rem;
-  color: var(--paper-accent);
-  margin: 0 0 0.5rem;
-}
-
-/* NPCs */
+/* NPCs, Inventory, Documents — share the same name/field/remove table layout */
 .npcs-table {
   width: 100%;
   border-collapse: collapse;
@@ -543,6 +533,38 @@
 .todo-item-text.done {
   text-decoration: line-through;
   opacity: 0.6;
+}
+
+/* Journal */
+.journal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.journal-entry {
+  border: 1px solid var(--paper-rule);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.journal-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.journal-entry-date {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--paper-accent);
+}
+
+.journal-entry-text {
+  min-height: 5rem;
+  padding: 0.25rem 0.1rem;
 }
 
 /* Collapse header fields to two columns on narrow screens, per PLAN.md.

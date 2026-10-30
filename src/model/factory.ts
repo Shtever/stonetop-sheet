@@ -1,4 +1,4 @@
-import type { Character, DocumentEntry, JournalEntry, TodoItem } from './types';
+import type { Character, DocumentEntry, JournalEntry, Move, ResourceGroup, TodoItem } from './types';
 import { xpNeededForLevel } from './rules';
 
 export function newCharacter(): Character {
@@ -62,10 +62,49 @@ export function normalizeCharacter(data: Partial<Character> | Record<string, unk
   }
 
   merged.followers = (merged.followers ?? []).map((f) => ({ ...f, description: f.description ?? '' }));
-  merged.resources = (merged.resources ?? []).map((g) => ({ description: '', ...g }));
+  merged.resources = migrateResources(merged.resources);
+  merged.moves = migrateMoves(merged.moves);
 
   merged.schemaVersion = 4;
   return merged;
+}
+
+// A move that was once saved as a single "X & Y" entry — split into two.
+// Fixes already-saved/already-seeded data, not just future seed files.
+const SPLIT_MOVES: Record<string, string[]> = {
+  'Sacred Tongue & Borrow Power': ['Sacred Tongue', 'Borrow Power'],
+};
+
+function migrateMoves(moves: Move[]): Move[] {
+  return moves.flatMap((move) => {
+    const split = SPLIT_MOVES[move.name];
+    if (!split) return [move];
+    return split.map((name, i) => ({
+      ...move,
+      id: i === 0 ? move.id : crypto.randomUUID(),
+      name,
+      text: i === 0 ? move.text : '',
+    }));
+  });
+}
+
+// Entries with no prepared/used/boxes tracking are just flavor text, not
+// real toggleable resources — fold them into the group's description
+// field instead (fixes already-saved data carrying e.g. Sacred Pouch's
+// contents as separate "spell" entries).
+function migrateResources(groups: ResourceGroup[]): ResourceGroup[] {
+  return (groups ?? []).map((g) => {
+    const entries = g.entries ?? [];
+    const isFlavorOnly = entries.every((e) => e.prepared === undefined && e.used === undefined && !e.boxes);
+    if (entries.length > 0 && isFlavorOnly && !g.description) {
+      const description = entries
+        .map((e) => [e.name, e.text].filter(Boolean).join(': '))
+        .filter(Boolean)
+        .join('. ');
+      return { ...g, description, entries: [] };
+    }
+    return { description: g.description ?? '', ...g };
+  });
 }
 
 function migrateTodo(raw: unknown): TodoItem[] {

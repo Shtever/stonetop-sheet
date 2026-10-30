@@ -94,6 +94,7 @@ export default function FollowersBlock({ character, onChange }: Props) {
                 placeholder="comma, separated"
                 value={follower.tags}
                 onChange={(tags) => updateFollower(follower.id, { tags })}
+                showSubmit
               />
             </label>
           </div>

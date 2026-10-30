@@ -38,14 +38,13 @@ export default function StatsBlock({ character, onChange }: Props) {
           </div>
         ))}
       </div>
+      {/* Mirrors stats-grid's 6 columns so each debility centers under its pair. */}
       <div className="debilities-row">
         {DEBILITY_DEFS.map((d) => (
-          <Checkbox
-            key={d.name}
-            label={`${d.name} (${d.affects.join('/')})`}
-            checked={isMarked(d.name)}
-            onChange={() => toggleDebility(d.name, d.affects)}
-          />
+          <div key={d.name} className="debility-cell">
+            <span className="debility-name">{d.name}</span>
+            <Checkbox checked={isMarked(d.name)} onChange={() => toggleDebility(d.name, d.affects)} size="compact" />
+          </div>
         ))}
       </div>
     </section>

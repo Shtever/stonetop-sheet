@@ -49,23 +49,32 @@ export default function ResourceGroups({ character, onChange }: Props) {
           </div>
           {group.entries.map((entry) => (
             <div key={entry.id} className="resource-entry">
-              <span className="resource-entry-name">{entry.name}</span>
-              {entry.prepared !== undefined && (
-                <Checkbox
-                  label="Prepared"
-                  checked={entry.prepared}
-                  onChange={(prepared) => updateEntry(group.id, entry.id, { prepared })}
-                  size="compact"
-                />
-              )}
-              {entry.used !== undefined && (
-                <Checkbox
-                  label="Used"
-                  checked={entry.used}
-                  onChange={(used) => updateEntry(group.id, entry.id, { used })}
-                  size="compact"
-                />
-              )}
+              <div className="resource-entry-row">
+                <span className="resource-entry-name">{entry.name}</span>
+                {entry.prepared !== undefined && (
+                  <Checkbox
+                    label="Prepared"
+                    checked={entry.prepared}
+                    onChange={(prepared) => updateEntry(group.id, entry.id, { prepared })}
+                    size="compact"
+                  />
+                )}
+                {entry.used !== undefined && (
+                  <Checkbox
+                    label="Used"
+                    checked={entry.used}
+                    onChange={(used) => updateEntry(group.id, entry.id, { used })}
+                    size="compact"
+                  />
+                )}
+              </div>
+              <input
+                className="resource-entry-text"
+                type="text"
+                placeholder="Description"
+                value={entry.text}
+                onChange={(e) => updateEntry(group.id, entry.id, { text: e.target.value })}
+              />
             </div>
           ))}
         </div>

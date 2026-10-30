@@ -1,33 +1,25 @@
 # Stonetop Character Sheet App — To Do List
 
 ## overall
--make the whole app appear on a card with color #F3E9D7, with super narrow margins on top/bottom, and normal margins on both sides. dark charcoal background.
+- Optimize this for an ipad/tablet. Resize the card to fit the dimensions/ratio of a tablet screen in portrait orientation
 
 ## About character section ##
-- Shrink line height so it only takes up about 10-15% screen height
-- import/export json buttons should be smaller and at the bottom of the app.
-- all stats should be on same row
--consolidate the HP data into one block
-- move 'XP & Background' up next to level.
--rename 'XP & bakcground' to 'XP'
--debilities are as follows: weakened (STR & Dex), dazed (int & wis), miserable (con & cha)
+- reduce the checkbox size to text height.
+- the stats should stay in one row - even when screen/device width is reduced.
+- stick the debilities text below and centered between the associated stats and place the check box below the debility text.
 
 ## Moves section
-- shrink the check boxes to match text height
-- allow text box to be 'submitted' so the player can't accidentally type or delete move text.
+- moves should be bold/heavy font.
 
 ## inventory tab
-- shrink check boxes to match text height
-- shrink stock boxes to match text height
-- allow text descriptions to be entered for inventory items
+-allow user to edit description of spells and resources.
 
 ## followers tab
-- create a 'Followers tab'
-- add a 'Add follower' button
-- allow user to add name, hp, damage, and tags to 'add follower' function.
+- add a description in line with the name field. The name field should take up about 25% of the row, and description takes up the remaining 75%
 
 ## npc tab
-- no changes
+-no changes
 
 ## notes tab
-- add sub tabs: to do, journal, documents, and anything else you deem necessary
+- the to do tab should be a checklist rather than standard text field
+- Documents should have two fields: document name and description. similar to the NPC tab layout.

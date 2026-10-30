@@ -1,10 +1,10 @@
-import type { Character } from './types';
+import type { Character, DocumentEntry, TodoItem } from './types';
 import { xpNeededForLevel } from './rules';
 
 export function newCharacter(): Character {
   return {
     id: crypto.randomUUID(),
-    schemaVersion: 2,
+    schemaVersion: 3,
     updatedAt: new Date().toISOString(),
 
     name: '',
@@ -33,25 +33,50 @@ export function newCharacter(): Character {
     bonds: [],
     npcs: [],
     followers: [],
-    notes: { todo: '', journal: '', documents: '' },
+    notes: { todo: [], journal: '', documents: [] },
   };
 }
 
-// Backfills fields added after a record was saved, and migrates the old
-// schemaVersion 1 shape (notes as a single string) to schemaVersion 2
-// (notes split into todo/journal/documents pages).
+// Backfills fields added after a record was saved, and migrates older
+// schemaVersions forward:
+//   1 -> 2: notes was a single string -> split into todo/journal/documents.
+//   2 -> 3: notes.todo was a string -> checklist items; notes.documents was
+//           a string -> {name, description} entries.
 export function normalizeCharacter(data: Partial<Character> | Record<string, unknown>): Character {
   const base = newCharacter();
   const input = data as Partial<Character>;
   const merged: Character = { ...base, ...input, id: input.id ?? base.id };
 
-  const rawNotes = (data as Record<string, unknown>).notes;
+  const rawNotes = (data as Record<string, unknown>).notes as Record<string, unknown> | string | undefined;
+
   if (typeof rawNotes === 'string') {
-    merged.notes = { todo: '', journal: rawNotes, documents: '' };
+    // schemaVersion 1: notes was one free-text field.
+    merged.notes = { todo: [], journal: rawNotes, documents: [] };
   } else if (rawNotes && typeof rawNotes === 'object') {
-    merged.notes = { ...base.notes, ...(rawNotes as Partial<Character['notes']>) };
+    const todo = migrateTodo(rawNotes.todo);
+    const documents = migrateDocuments(rawNotes.documents);
+    const journal = typeof rawNotes.journal === 'string' ? rawNotes.journal : base.notes.journal;
+    merged.notes = { todo, journal, documents };
   }
 
-  merged.schemaVersion = 2;
+  merged.followers = (merged.followers ?? []).map((f) => ({ ...f, description: f.description ?? '' }));
+
+  merged.schemaVersion = 3;
   return merged;
+}
+
+function migrateTodo(raw: unknown): TodoItem[] {
+  if (Array.isArray(raw)) return raw as TodoItem[];
+  if (typeof raw === 'string' && raw.trim()) {
+    return [{ id: crypto.randomUUID(), text: raw, done: false }];
+  }
+  return [];
+}
+
+function migrateDocuments(raw: unknown): DocumentEntry[] {
+  if (Array.isArray(raw)) return raw as DocumentEntry[];
+  if (typeof raw === 'string' && raw.trim()) {
+    return [{ id: crypto.randomUUID(), name: 'Untitled', description: raw }];
+  }
+  return [];
 }

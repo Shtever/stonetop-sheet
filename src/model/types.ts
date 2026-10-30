@@ -41,15 +41,28 @@ export interface Npc {
 export interface Follower {
   id: string;
   name: string;
+  description: string;
   hp: { current: number; max: number };
   damage: string; // e.g. 'd6'
   tags: string[];
 }
 
+export interface TodoItem {
+  id: string;
+  text: string;
+  done: boolean;
+}
+
+export interface DocumentEntry {
+  id: string;
+  name: string;
+  description: string;
+}
+
 export interface NotesPages {
-  todo: string;
+  todo: TodoItem[];
   journal: string;
-  documents: string;
+  documents: DocumentEntry[];
 }
 
 export interface Item {
@@ -64,7 +77,7 @@ export interface Item {
 
 export interface Character {
   id: string;
-  schemaVersion: 1 | 2;
+  schemaVersion: 1 | 2 | 3;
   updatedAt: string; // ISO date
 
   name: string;

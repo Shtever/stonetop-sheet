@@ -1,5 +1,6 @@
 .sheet {
   width: 100%;
+  min-height: calc(100dvh - 1rem);
   background: var(--paper-bg);
   margin-block: 0.5rem;
   margin-inline: 1rem;
@@ -164,11 +165,26 @@
   font-size: 1.1rem;
 }
 
+/* Mirrors stats-grid's 6 columns so each debility centers under its pair. */
 .debilities-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.4rem;
   margin-top: 0.6rem;
+}
+
+.debility-cell {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.debility-name {
+  font-size: 0.75rem;
+  text-align: center;
+  color: var(--paper-ink);
 }
 
 /* HP, Armor, Damage — one consolidated row */
@@ -241,6 +257,10 @@
   gap: 0.5rem;
 }
 
+.move-entry-header .paper-checkbox span {
+  font-weight: 700;
+}
+
 .move-edit-toggle {
   border: 1px solid var(--paper-rule);
   background: transparent;
@@ -303,14 +323,33 @@
 }
 
 .resource-entry {
+  margin-bottom: 0.4rem;
+}
+
+.resource-entry-row {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.25rem;
 }
 
 .resource-entry-name {
   min-width: 10rem;
+}
+
+.resource-entry-text {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--paper-rule);
+  background: transparent;
+  color: var(--paper-ink);
+  font-size: 0.85rem;
+  padding: 0.15rem 0.1rem;
+  margin-top: 0.15rem;
+}
+
+.resource-entry-text:focus {
+  outline: none;
+  border-bottom-color: var(--paper-accent);
 }
 
 /* Inventory */
@@ -420,16 +459,29 @@
 }
 
 .follower-name {
-  flex: 1;
+  flex: 0 0 25%;
   border: none;
   border-bottom: 1px solid var(--paper-rule);
   background: transparent;
   color: var(--paper-ink);
   font-size: 1.05rem;
   padding: 0.2rem 0.1rem;
+  min-width: 0;
 }
 
-.follower-name:focus {
+.follower-description {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid var(--paper-rule);
+  background: transparent;
+  color: var(--paper-ink);
+  font-size: 0.9rem;
+  padding: 0.2rem 0.1rem;
+  min-width: 0;
+}
+
+.follower-name:focus,
+.follower-description:focus {
   outline: none;
   border-bottom-color: var(--paper-accent);
 }
@@ -461,7 +513,40 @@
   width: 100%;
 }
 
-/* Collapse header fields to two columns on narrow screens, per PLAN.md */
+/* To Do checklist */
+.todo-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.todo-item-text {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid var(--paper-rule);
+  background: transparent;
+  color: var(--paper-ink);
+  padding: 0.2rem 0.1rem;
+}
+
+.todo-item-text:focus {
+  outline: none;
+  border-bottom-color: var(--paper-accent);
+}
+
+.todo-item-text.done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Collapse header fields to two columns on narrow screens, per PLAN.md.
+   Stats stay on one row at every width (per ToDo.md); they just shrink. */
 @media (max-width: 800px) {
   .sheet-header-top {
     grid-template-columns: 1fr 1fr;
@@ -472,6 +557,22 @@
   }
 
   .stats-grid {
-    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem;
+  }
+
+  .stat-box {
+    padding: 0.25rem 0.1rem;
+  }
+
+  .stat-key {
+    font-size: 0.65rem;
+  }
+
+  .stat-modifier {
+    font-size: 1.1rem;
+  }
+
+  .debility-name {
+    font-size: 0.6rem;
   }
 }

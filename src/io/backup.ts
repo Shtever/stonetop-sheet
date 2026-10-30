@@ -14,8 +14,9 @@ export function exportCharacter(character: Character): void {
 export async function importCharacter(file: File): Promise<Character> {
   const text = await file.text();
   const data = JSON.parse(text) as Partial<Character>;
-  if (data.schemaVersion !== 1 && data.schemaVersion !== 2) {
-    throw new Error(`Unsupported schema version: ${data.schemaVersion}`);
+  const version = data.schemaVersion;
+  if (version !== 1 && version !== 2 && version !== 3) {
+    throw new Error(`Unsupported schema version: ${version}`);
   }
   return normalizeCharacter(data);
 }

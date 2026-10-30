@@ -6,7 +6,14 @@ interface Props {
 }
 
 function emptyFollower(): Follower {
-  return { id: crypto.randomUUID(), name: '', hp: { current: 0, max: 0 }, damage: 'd6', tags: [] };
+  return {
+    id: crypto.randomUUID(),
+    name: '',
+    description: '',
+    hp: { current: 0, max: 0 },
+    damage: 'd6',
+    tags: [],
+  };
 }
 
 export default function FollowersBlock({ character, onChange }: Props) {
@@ -34,6 +41,13 @@ export default function FollowersBlock({ character, onChange }: Props) {
               placeholder="Name"
               value={follower.name}
               onChange={(e) => updateFollower(follower.id, { name: e.target.value })}
+            />
+            <input
+              className="follower-description"
+              type="text"
+              placeholder="Description"
+              value={follower.description}
+              onChange={(e) => updateFollower(follower.id, { description: e.target.value })}
             />
             <button
               type="button"

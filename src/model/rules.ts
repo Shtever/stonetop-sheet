@@ -2,7 +2,10 @@
 // your own book — see PLAN.md's open questions.
 import type { StatKey } from './types';
 
-export const STAT_KEYS: StatKey[] = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+// Ordered so each debility's two stats sit adjacent (see DEBILITY_DEFS
+// below), which the stats row layout relies on to center each debility
+// under its pair.
+export const STAT_KEYS: StatKey[] = ['STR', 'DEX', 'INT', 'WIS', 'CON', 'CHA'];
 
 // XP needed to level up, by current level. Placeholder until checked against
 // the book (PLAN.md open question).

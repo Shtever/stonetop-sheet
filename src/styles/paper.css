@@ -24,9 +24,12 @@ body {
   justify-content: center;
 }
 
+/* Matches a typical iPad portrait width (e.g. iPad Air/Pro 11" logical
+   pixels) so the card reads as one tablet-shaped page instead of a wide
+   desktop layout. */
 #root {
   width: 100%;
-  max-width: 1100px;
+  max-width: 834px;
 }
 
 h1,
